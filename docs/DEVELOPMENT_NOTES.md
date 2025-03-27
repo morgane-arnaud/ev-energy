@@ -1,10 +1,10 @@
-# 📄 Development Notes
+# Development Notes
 
 This document covers various aspects of the project, including improvements, architecture decisions, and future enhancements.
 
 ---
 
-## 📍 1. Current Location & Map Behavior
+## 1. Current Location & Map Behavior
 
 - The map should center on the user's **current location** when the app loads.
 - **Zoom level should adjust dynamically** to focus on the nearest charging stations.
@@ -20,7 +20,7 @@ This document covers various aspects of the project, including improvements, arc
 
 ---
 
-## 🔧 2. API Structure & Hardcoded Params
+## 2. API Structure & Hardcoded Params
 
 **Current Structure:**
 
@@ -39,7 +39,7 @@ This document covers various aspects of the project, including improvements, arc
 
 ---
 
-## ❌ 3. Error Handling
+## 3. Error Handling
 
 **Current Behavior:**
 
@@ -56,7 +56,7 @@ This document covers various aspects of the project, including improvements, arc
 
 ---
 
-## 🎨 4. Styles & Typography
+## 4. Styles & Typography
 
 **Current Implementation:**
 
@@ -73,7 +73,7 @@ This document covers various aspects of the project, including improvements, arc
 
 ---
 
-## 🧹 5. Clean-up Unused Components & Colors
+## 5. Clean-up Unused Components & Colors
 
 **Current Status:**
 
@@ -86,7 +86,7 @@ This document covers various aspects of the project, including improvements, arc
 
 ---
 
-## ⚙️ 6. axiosInstance for API Calls
+## 6. axiosInstance for API Calls
 
 ### axiosinstance-for-api-calls
 
@@ -108,7 +108,7 @@ In order to view the real response, replace `axiosInstance.post` with `axios.pos
 
 ---
 
-## 🚀 7. Future Enhancements
+## 7. Future Enhancements
 
 - I added a Profile Tab: This would be a dedicated section where users can manage their profile and preferences (Settings, default charging station preferences, etc).
 - I also added a Charge Tab: This could be a central hub for users to manage and monitor their charging sessions.
