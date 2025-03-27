@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -16,9 +16,17 @@ import {
   DEFAULT_LONGITUDE_DELTA,
 } from '@/constants/Map.constants';
 import globalStyles from '@/styles/global.styles';
+import BottomSheetModal from '@/components/BottomSheetModal';
+import { getChargingStations } from '@/services/api/api';
 
 const HomeScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const [chargingStations, setChargingStations] = useState<any[]>([]);
+  const [selectedChargerDetails, setSelectedChargerDetails] = useState<{
+    address: string;
+    numberOfConnections: number;
+  } | null>(null);
 
   const initialRegion = {
     latitude: USER_CURRENT_LATITUDE,
@@ -27,14 +35,41 @@ const HomeScreen: React.FC = () => {
     longitudeDelta: DEFAULT_LONGITUDE_DELTA,
   };
 
+  const fetchChargingStations = async () => {
+    const stations = await getChargingStations();
+    setChargingStations(stations);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchChargingStations();
+  }, []);
+
+  const startCharging = () => {
+    // TODO: BE Call
+    setIsBottomSheetVisible(false);
+    // TODO: what next ? router.push('..') ?
+  };
+
+  const handleSelectCharger = (chargerDetails: any) => {
+    const { AddressLine1, Town, StateOrProvince, Postcode } =
+      chargerDetails?.AddressInfo ?? {};
+
+    setSelectedChargerDetails({
+      address: `${AddressLine1}, ${Town}, ${StateOrProvince} ${Postcode}`,
+      numberOfConnections: chargerDetails?.Connections?.length,
+    });
+    setIsBottomSheetVisible(true);
+  };
+
   if (isLoading) {
     return (
       <View style={globalStyles.container}>
         <ActivityIndicator />
       </View>
     );
-    return;
   }
+
   return (
     <SafeAreaView style={globalStyles.container}>
       <Stack.Screen
@@ -63,8 +98,39 @@ const HomeScreen: React.FC = () => {
             }}
             pinColor={Colors.tertiary}
           />
+          {chargingStations?.map((charger) => {
+            return (
+              <Marker
+                key={charger.ID}
+                coordinate={{
+                  latitude: charger.AddressInfo.Latitude,
+                  longitude: charger.AddressInfo.Longitude,
+                }}
+                onPress={() => handleSelectCharger(charger)}
+              >
+                <View style={styles.marker}>
+                  <Text style={styles.markerText}>
+                    {charger.Connections.length}
+                  </Text>
+                </View>
+              </Marker>
+            );
+          })}
         </MapView>
       </View>
+      <BottomSheetModal
+        isVisible={isBottomSheetVisible}
+        title='Address'
+        text={selectedChargerDetails?.address ?? ''}
+        textLine2={`${selectedChargerDetails?.numberOfConnections} Charging ${
+          selectedChargerDetails?.numberOfConnections === 1
+            ? 'Station'
+            : 'Stations'
+        }`}
+        onContinue={startCharging}
+        onClose={() => setIsBottomSheetVisible(false)}
+        buttonText='Start Charging'
+      />
     </SafeAreaView>
   );
 };
@@ -78,5 +144,17 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  marker: {
+    backgroundColor: Colors.primary,
+    borderRadius: 15,
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  markerText: {
+    ...globalStyles.buttonText,
+    fontSize: 14,
   },
 });
