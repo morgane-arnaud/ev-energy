@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Pressable,
+  Alert,
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Stack } from 'expo-router';
@@ -18,16 +19,20 @@ import {
 } from '@/constants/Map.constants';
 import globalStyles from '@/styles/global.styles';
 import BottomSheetModal from '@/components/BottomSheetModal';
-import { getChargingStations } from '@/services/api/api';
+import { getChargingStations, startChargingSession } from '@/services/api/api';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import AlertBanner from '@/components/AlertBanner';
+import { ChargingStationResponse } from '@/services/api/api.types';
 
 const HomeScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [isInfoBannerVisible, setIsInfoBannerVisible] = useState(false);
-  const [chargingStations, setChargingStations] = useState<any[]>([]); //TODO: Types
+  const [chargingStations, setChargingStations] = useState<
+    ChargingStationResponse[]
+  >([]);
   const [selectedChargerDetails, setSelectedChargerDetails] = useState<{
+    id: number;
     address: string;
     numberOfConnections: number;
   } | null>(null);
@@ -50,17 +55,25 @@ const HomeScreen: React.FC = () => {
     fetchChargingStations();
   }, []);
 
-  const startCharging = () => {
-    // TODO: BE Call
-    setIsBottomSheetVisible(false);
-    // TODO: what next ? router.push('..') ?
+  const handleStartCharging = async () => {
+    const response = await startChargingSession(selectedChargerDetails?.id);
+    if (response.success) {
+      Alert.alert('Success!', response.message);
+    } else {
+      Alert.alert('Error', response.message);
+    }
   };
 
-  const handleSelectCharger = (chargerDetails: any) => {
+  const startCharging = () => {
+    setIsBottomSheetVisible(false);
+    handleStartCharging();
+  };
+
+  const handleSelectCharger = (chargerDetails: ChargingStationResponse) => {
     const { AddressLine1, Town, StateOrProvince, Postcode } =
       chargerDetails?.AddressInfo ?? {};
-
     setSelectedChargerDetails({
+      id: chargerDetails?.ID,
       address: `${AddressLine1}, ${Town}, ${StateOrProvince} ${Postcode}`,
       numberOfConnections: chargerDetails?.Connections?.length,
     });
