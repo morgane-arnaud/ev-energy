@@ -5,6 +5,7 @@ import {
   Text,
   SafeAreaView,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Stack } from 'expo-router';
@@ -18,10 +19,13 @@ import {
 import globalStyles from '@/styles/global.styles';
 import BottomSheetModal from '@/components/BottomSheetModal';
 import { getChargingStations } from '@/services/api/api';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import AlertBanner from '@/components/AlertBanner';
 
 const HomeScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  const [isInfoBannerVisible, setIsInfoBannerVisible] = useState(false);
   const [chargingStations, setChargingStations] = useState<any[]>([]);
   const [selectedChargerDetails, setSelectedChargerDetails] = useState<{
     address: string;
@@ -36,6 +40,7 @@ const HomeScreen: React.FC = () => {
   };
 
   const fetchChargingStations = async () => {
+    setIsLoading(true);
     const stations = await getChargingStations();
     setChargingStations(stations);
     setIsLoading(false);
@@ -81,6 +86,18 @@ const HomeScreen: React.FC = () => {
             </Text>
           ),
           headerStyle: { backgroundColor: Colors.background },
+          headerRight: () => (
+            <Pressable
+              onPress={() => setIsInfoBannerVisible(!isInfoBannerVisible)}
+            >
+              <IconSymbol
+                size={20}
+                name='info.circle'
+                color='white'
+                style={{ marginRight: 15 }}
+              />
+            </Pressable>
+          ),
         }}
       />
       <View style={styles.mapContainer}>
@@ -118,6 +135,12 @@ const HomeScreen: React.FC = () => {
           })}
         </MapView>
       </View>
+      {isInfoBannerVisible && (
+        <AlertBanner
+          onClose={() => setIsInfoBannerVisible(false)}
+          text='Each circle shows the number of available charging stations. Tap on one to view more details! '
+        />
+      )}
       <BottomSheetModal
         isVisible={isBottomSheetVisible}
         title='Address'
