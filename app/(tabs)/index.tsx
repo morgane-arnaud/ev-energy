@@ -26,7 +26,7 @@ const HomeScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [isInfoBannerVisible, setIsInfoBannerVisible] = useState(false);
-  const [chargingStations, setChargingStations] = useState<any[]>([]);
+  const [chargingStations, setChargingStations] = useState<any[]>([]); //TODO: Types
   const [selectedChargerDetails, setSelectedChargerDetails] = useState<{
     address: string;
     numberOfConnections: number;
