@@ -9,6 +9,11 @@ const globalStyles = StyleSheet.create({
     backgroundColor: Colors.background,
     padding: 20,
   },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
