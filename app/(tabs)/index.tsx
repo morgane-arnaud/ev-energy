@@ -24,6 +24,13 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import AlertBanner from '@/components/AlertBanner';
 import { ChargingStationResponse } from '@/services/api/api.types';
 
+interface ChargerDetails {
+  // TODO: This should be in a type file
+  id: number;
+  address: string;
+  numberOfConnections: number;
+}
+
 const HomeScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
@@ -31,11 +38,8 @@ const HomeScreen: React.FC = () => {
   const [chargingStations, setChargingStations] = useState<
     ChargingStationResponse[]
   >([]);
-  const [selectedChargerDetails, setSelectedChargerDetails] = useState<{
-    id: number;
-    address: string;
-    numberOfConnections: number;
-  } | null>(null);
+  const [selectedChargerDetails, setSelectedChargerDetails] =
+    useState<ChargerDetails | null>(null);
 
   const initialRegion = {
     latitude: USER_CURRENT_LATITUDE,

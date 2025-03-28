@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
   timeout: 10000, // Set a timeout for the request
 });
 
-// Add an Axios response interceptor to mock the response
+// Axios response interceptor to mock the response
 axiosInstance.interceptors.response.use(
   (response) => {
     if (response.config.url === EV_ENERGY_API_URL) {
@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
         data: MOCK_RESPONSE, // Mocked data in case of network failure
       });
     }
-    // If the error is not a network error, propagate it
+    // Else if the error is not a network error:
     return Promise.reject(error);
   }
 );

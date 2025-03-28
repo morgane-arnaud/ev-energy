@@ -1,22 +1,13 @@
 # Development Notes
 
-This document covers various aspects of the project, including improvements, architecture decisions, and future enhancements.
+This document covers various aspects of the code base that should be improved in the future.
 
 ---
 
 ## 1. Current Location & Map Behavior
 
 - The map should center on the user's **current location** when the app loads.
-- **Zoom level should adjust dynamically** to focus on the nearest charging stations.
-
-**Current Behavior:**
-
-- The current behavior uses a hardcoded user location.
-
-**Future Enhancements:**
-
-- Implement **real-time location tracking** to update the map to the user's real location. This could either be based on their current location or a default home location.
-- Allow users to manually **search for locations** instead of relying only on GPS.
+- The current behavior uses a hardcoded user location. (Shown by the orange pin). In the real world this location would not be hardcoded.
 
 ---
 
@@ -32,10 +23,10 @@ This document covers various aspects of the project, including improvements, arc
 - **Store Types & Interfaces Separately**: Create a dedicated folder for types and interfaces to keep the project organized.
   - The Types I used for the `ChargingStationResponse` were based on the response. These might not be accurate but rather a placeholder.
   - Define **strong TypeScript interfaces** for all API requests and responses to improve type safety.
-  - Use these types across the application to ensure that the data conforms to the expected structure and to help with code autocompletion and error checking.
+  - Use these types across the application to ensure that the data conforms to the expected structure and to prevent errors.
 - **Dynamic Values for API Parameters**: Replace hardcoded values (e.g., user ID, car ID) with dynamically fetched ones.
 - **Secure Storage of API Keys**: API URLs and keys should not be hardcoded into the app. Instead, they should be stored securely in a `.env` file or via secure storage mechanisms (e.g., environment variables, backend proxy).
-  **Support Multiple Environments**: Configure different environments (e.g., development, staging, production) to ensure appropriate configurations are used for each.
+- **Support Multiple Environments**: Configure different environments (e.g., development, staging, production) to ensure appropriate configurations are used for each.
 
 ---
 
@@ -53,6 +44,7 @@ This document covers various aspects of the project, including improvements, arc
 - **Error Boundary**: Implement error boundaries in the app to catch and handle unexpected errors gracefully.
 - **Logging**: Integrate logging services like **Sentry** or **Datadog** for tracking and monitoring errors in production.
 - **Toasts**: Integrate toasts or something similar to better inform the user of loading/success/fail attempts.
+- **Testing**: No testing was implemented on this prototype, these should be added to prevent regressions and improve code quality.
 
 ---
 
@@ -81,12 +73,14 @@ This document covers various aspects of the project, including improvements, arc
 
 **Action Items:**
 
-- Perform a **repository clean-up** to remove unused components, styles, and assets that are no longer necessary.
-- Review all files to ensure they are properly utilized or remove them if redundant.
+- Do a **repository clean-up** to remove unused components, styles, and assets that are no longer necessary.
+- Review all files to ensure they are properly used or remove redundant files.
 
 ---
 
-## 6. axiosInstance for API Calls
+## 6. Axios for API Calls
+
+For this prototype, Axios was used to handle API requests due to its simplicity and ease of integration.
 
 ### axiosinstance-for-api-calls
 
@@ -104,27 +98,6 @@ In order to view the real response, replace `axiosInstance.post` with `axios.pos
 
 **Recommended Improvements:**
 
-- Replace the endpoint with a real, working endpoint.
-
----
-
-## 7. Future Enhancements
-
-- I added a Profile Tab: This would be a dedicated section where users can manage their profile and preferences (Settings, default charging station preferences, etc).
-- I also added a Charge Tab: This could be a central hub for users to manage and monitor their charging sessions.
-  - Real-time session status (with the option to pause, resume, or stop the session)
-  - Charging history (eg Location, Cost, Duration)
-  - Session metrics (eg time taken, energy consumed, and cost per session)
-- Notifications: To alert users about charging status changes, session completions, station availability, or app-related notifications
-- As mentioned above, the map feature would track a user in real time.
-  Further additions could be
-  - Location-based recommendations
-  - Directions: Allow users to open the selected charging station's address in their preferred map app for easy navigation.
-  - Additional station details: Provide more detailed information on each charging station, such as estimated travel time, distance, and even potential wait times based on current availability.
-  - While I added how many connections were at the charging station, more information (eg station current availability or waiting time, station maintenance/broken status) could be useful.
-- User Authentication & Account Sync
-- User Engagement Features, maybe based on a Sustainability Focus
-- Responsive/Animated Designs and Features
-- Offline Mode
+- Replace the endpoint with a real, working endpoint. (And remove the instance, `axios.config.ts` once its unused)
 
 ---

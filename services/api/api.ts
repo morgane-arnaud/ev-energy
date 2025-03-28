@@ -43,12 +43,11 @@ export const startChargingSession = async (
       car_id: 1, // Hardcoded car ID for prototype
       charger_id: chargerId,
     });
-
     return data;
   } catch (error: any) {
     console.log(
       'Error starting charging session:',
-      error?.response?.data || error
+      error?.response?.data ?? error
     );
     return { success: false, message: 'Failed to start charging session.' };
   }

@@ -39,6 +39,8 @@ This will start the Expo development server and open the Expo client, where you 
 
 [DEVELOPMENT_NOTES.md](docs/DEVELOPMENT_NOTES.md)
 
+[FUTURE_ENHANCEMENTS.md](docs/FUTURE_ENHANCEMENTS.md)
+
 ## 5. Mocking API Requests with `axiosInstance`
 
 Since the `ev-example` API endpoint does not exist, I created a reusable `axiosInstance` to mock the response when a user attempts to start a charging session.
